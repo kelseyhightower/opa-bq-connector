@@ -1,0 +1,42 @@
+[
+    {
+        "name": "bundles",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "decision_id",
+        "type": "STRING",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "input",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "labels",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "path",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "requested_by",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "result",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "timestamp",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    }
+]

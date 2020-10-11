@@ -1,0 +1,15 @@
+#!/bin/bash
+
+PROJECT_ID=$(gcloud config get-value project)
+
+gcloud run deploy opa-bq-connector \
+  --concurrency 80 \
+  --cpu 1 \
+  --image "gcr.io/${PROJECT_ID}/opa-bq-connector:0.0.1" \
+  --memory '1G' \
+  --no-allow-unauthenticated \
+  --platform managed \
+  --port 8080 \
+  --region us-west1 \
+  --service-account "opa-bq-connector@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --timeout 300
