@@ -1,0 +1,8 @@
+#!/bin/bash
+
+PROJECT_ID=$(gcloud config get-value project)
+
+bq --location=US mk -d \
+  --default_table_expiration 84000 \
+  --description "Open Policy Agent dataset." \
+  "${PROJECT_ID}:opa"

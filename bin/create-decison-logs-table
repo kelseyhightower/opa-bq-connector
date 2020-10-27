@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+PROJECT_ID=$(gcloud config get-value project)
+
+bq mk \
+  --table "${PROJECT_ID}:opa.decison_logs" \
+  ./schema.json
