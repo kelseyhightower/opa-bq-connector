@@ -52,6 +52,7 @@ func main() {
 		run.Fatal(err)
 	}
 
+	run.Notice("Creating bq client...")
 	ctx := context.Background()
 	client, err := bigquery.NewClient(ctx, projectID)
 	if err != nil {

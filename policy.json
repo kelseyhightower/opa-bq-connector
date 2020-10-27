@@ -1,0 +1,11 @@
+{
+  "etag": "ACAB",
+  "bindings": [
+    {
+      "members": [
+        "serviceAccount:opa-bq-connector@hightowerlabs.iam.gserviceaccount.com"
+      ],
+      "role": "roles/bigquery.dataEditor"
+    }
+  ]
+}

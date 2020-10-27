@@ -4,5 +4,5 @@
 PROJECT_ID=$(gcloud config get-value project)
 
 bq mk \
-  --table "${PROJECT_ID}:opa.decison_logs" \
+  --table "${PROJECT_ID}:opa.decision_logs" \
   ./schema.json

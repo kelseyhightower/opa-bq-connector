@@ -3,7 +3,7 @@
 PROJECT_ID=$(gcloud config get-value project)
 SERVICE_ACCOUNT="opa-bq-connector@${PROJECT_ID}.iam.gserviceaccount.com"
 
-gcloud run deploy opa-bq-connector \
+gcloud beta run deploy opa-bq-connector \
   --concurrency 80 \
   --cpu 1 \
   --image "gcr.io/${PROJECT_ID}/opa-bq-connector:0.0.1" \

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+PROJECT_ID=$(gcloud config get-value project)
+SERVICE_ACCOUNT="open-policy-agent@${PROJECT_ID}.iam.gserviceaccount.com"
+
+gcloud run services add-iam-policy-binding opa-bq-connector \
+  --member="serviceAccount:${SERVICE_ACCOUNT}" \
+  --role='roles/run.invoker' \
+  --platform managed \
+  --region us-west1

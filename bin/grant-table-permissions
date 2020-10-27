@@ -1,0 +1,41 @@
+#!/bin/bash
+
+
+PROJECT_ID=$(gcloud config get-value project)
+SERVICE_ACCOUNT="opa-bq-connector@${PROJECT_ID}.iam.gserviceaccount.com"
+
+cat <<EOF > policy.json
+{
+  "etag": "ACAB",
+  "bindings": [
+    {
+      "members": [
+        "serviceAccount:${SERVICE_ACCOUNT}"
+      ],
+      "role": "roles/bigquery.dataEditor"
+    }
+  ]
+}
+EOF
+
+bq set-iam-policy \
+   "${PROJECT_ID}:opa" \
+   ./policy.json
+
+cat <<EOF > policy.json
+{
+  "etag": "ACAB",
+  "bindings": [
+    {
+      "members": [
+        "serviceAccount:${SERVICE_ACCOUNT}"
+      ],
+      "role": "roles/bigquery.dataEditor"
+    }
+  ]
+}
+EOF
+
+bq set-iam-policy \
+   "${PROJECT_ID}:opa.decision_logs" \
+   ./policy.json

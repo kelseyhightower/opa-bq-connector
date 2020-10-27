@@ -1,4 +1,4 @@
-module github.com/kelseyhightower/opa-bigquery-connector
+module github.com/kelseyhightower/opa-bq-connector
 
 go 1.15
 
