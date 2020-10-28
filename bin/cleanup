@@ -1,0 +1,20 @@
+#!/bin/bash
+
+PROJECT_ID=$(gcloud config get-value project)
+SERVICE_ACCOUNT="opa-bq-connector@${PROJECT_ID}.iam.gserviceaccount.com"
+
+bq remove-iam-policy-binding \
+  --member="serviceAccount:${SERVICE_ACCOUNT}" \
+  --role='roles/bigquery.dataEditor' \
+  "${PROJECT_ID}:opa.decision_logs"
+
+echo "Deleting opa-bq-connector service ..."
+gcloud -q beta run services delete opa-bq-connector \
+  --platform managed \
+  --region us-west1
+
+bq --location=US rm -t \
+  "${PROJECT_ID}:opa.decision_logs"
+
+bq --location=US rm -d \
+  "${PROJECT_ID}:opa"
