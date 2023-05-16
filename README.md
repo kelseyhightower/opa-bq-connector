@@ -19,11 +19,16 @@ PROJECT_ID=$(gcloud config get-value project)
 ```
 
 ```
+LOCATION="US"
+REGION="us-west1"
+```
+
+```
 gcloud iam service-accounts create opa-bq-connector
 ```
 
 ```
-bq --location=US mk -d \
+bq --location=${LOCATION} mk -d \
   --default_table_expiration 84000 \
   --description "Open Policy Agent dataset." \
   "${PROJECT_ID}:opa"
@@ -41,7 +46,7 @@ SERVICE_ACCOUNT="opa-bq-connector@${PROJECT_ID}.iam.gserviceaccount.com"
 ```
 
 ```
-bq show --format=prettyjson hightowerlabs:opa | \
+bq show --format=prettyjson ${PROJECT_ID}:opa | \
   jq --arg sa $SERVICE_ACCOUNT \
     '.access += [{"role": "READER", "userByEmail": $sa}]' \
   > dataset-policy.json
@@ -50,7 +55,7 @@ bq show --format=prettyjson hightowerlabs:opa | \
 ```
 bq update \
   --source dataset-policy.json \ 
-  "$PROJECT_ID:opa"
+  "${PROJECT_ID}:opa"
 ```
 
 ```
@@ -74,16 +79,37 @@ bq set-iam-policy \
 ```
 
 ```
+gsutil mb -l ${REGION} gs://${PROJECT_ID}_cloudbuild
+```
+
+```
+cat <<EOF > cloudbuild.yaml
+steps:
+- name: 'docker'
+  args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/opa-bq-connector', '.' ]
+
+images:
+- 'gcr.io/$PROJECT_ID/opa-bq-connector'
+
+tags: ['opa-bq-connector']
+EOF
+```
+
+```
+gcloud builds submit --config cloudbuild.yaml --region ${REGION}
+```
+
+```
 gcloud beta run deploy opa-bq-connector \
   --concurrency 80 \
   --cpu 1 \
-  --image "gcr.io/${PROJECT_ID}/opa-bq-connector:0.0.1" \
+  --image "gcr.io/${PROJECT_ID}/opa-bq-connector" \
   --memory '1G' \
   --min-instances 1 \
   --no-allow-unauthenticated \
   --platform managed \
   --port 8080 \
-  --region us-west1 \
+  --region ${REGION} \
   --service-account ${SERVICE_ACCOUNT} \
   --timeout 300
 ```
@@ -91,7 +117,7 @@ gcloud beta run deploy opa-bq-connector \
 ```
 URL=$(gcloud run services describe opa-bq-connector \
   --platform managed \
-  --region us-west1 \
+  --region ${REGION} \
   --format json | \
   jq -r '.status.url')
 ```
