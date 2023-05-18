@@ -54,7 +54,7 @@ bq show --format=prettyjson ${PROJECT_ID}:opa | \
 
 ```
 bq update \
-  --source dataset-policy.json \ 
+  --source dataset-policy.json \
   "${PROJECT_ID}:opa"
 ```
 
